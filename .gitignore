@@ -1,0 +1,9 @@
+blib/
+MYMETA.json
+MYMETA.yml
+Makefile
+PackedArray-*.tar.gz
+PackedArray.c
+PackedArray.o
+README
+pm_to_blib
