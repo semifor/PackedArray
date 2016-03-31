@@ -1,0 +1,9 @@
+README
+Changes
+MANIFEST
+LICENSE
+Makefile.PL
+PackedArray.xs
+PackedArray.pm
+META.yml
+META.json

@@ -5,5 +5,6 @@ Makefile
 PackedArray-*.tar.gz
 PackedArray.c
 PackedArray.o
+PackedArray.bs
 README
 pm_to_blib
