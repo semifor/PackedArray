@@ -85,6 +85,12 @@ unique_packed (SV *asv, SV *bsv)
     finalize_packed_array(bsv, b);
 }
 
+int
+count_packed (char *packed, int len)
+{
+    return (len / sizeof(int64_t));
+}
+
 MODULE = PackedArray    PACKAGE = PackedArray
 
 void sort_packed(char *packed, int length(packed))
@@ -92,3 +98,5 @@ void sort_packed(char *packed, int length(packed))
 void dedup_packed(SV *packed)
 
 void unique_packed(SV *a, SV *b)
+
+int count_packed(char *packed, int length(packed))

@@ -18,11 +18,12 @@ sub packed_to_array { unpack 'q*', shift }
 
 use Sub::Exporter -setup => {
     exports => [qw/
-        sort_packed
-        dedup_packed
-        unique_packed
         array_to_packed
+        count_packed
+        dedup_packed
         packed_to_array
+        sort_packed
+        unique_packed
     /],
 };
 1;
