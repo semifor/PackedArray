@@ -90,17 +90,15 @@ intersect_packed (SV *asv, SV *bsv)
     packed_array a = init_packed_array(asv);
     packed_array b = init_packed_array(bsv);
 
-    while ( a.p < a.end ) {
-        if ( b.p == b.end )
-            break;
-        else if ( *(a.p) == *(b.p) ) {
-            *(a.tail++) = *(b.p++);
+    while ( a.p < a.end && b.p < b.end ) {
+        if ( *a.p < *b.p )
             ++a.p;
-        }
-        else if ( *a.p < *b.p )
-            ++a.p;
-        else
+        else if ( *b.p < *a.p )
             ++b.p;
+        else {
+            *(a.tail++) = *(a.p++);
+            ++b.p;
+        }
     }
 
     finalize_packed_array(asv, a);
