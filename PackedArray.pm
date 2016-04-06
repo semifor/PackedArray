@@ -4,7 +4,7 @@ use warnings;
 use Scalar::Util qw/blessed/;
 
 BEGIN {
-   our $VERSION = 0.01;
+   our $VERSION = 0.02;
 
    require XSLoader;
    XSLoader::load ("PackedArray", $VERSION);
@@ -21,9 +21,11 @@ use Sub::Exporter -setup => {
         array_to_packed
         count_packed
         dedup_packed
+        intersect_packed
         packed_to_array
         sort_packed
         unique_packed
     /],
 };
+
 1;

@@ -67,7 +67,6 @@ unique_packed (SV *asv, SV *bsv)
     packed_array a = init_packed_array(asv);
     packed_array b = init_packed_array(bsv);
 
-    int i = 0;
     while ( a.p < a.end || b.p < b.end ) {
         if ( a.p == a.end )
             *(b.tail++) = *(b.p++);
@@ -85,6 +84,28 @@ unique_packed (SV *asv, SV *bsv)
     finalize_packed_array(bsv, b);
 }
 
+static void
+intersect_packed (SV *asv, SV *bsv)
+{
+    packed_array a = init_packed_array(asv);
+    packed_array b = init_packed_array(bsv);
+
+    while ( a.p < a.end ) {
+        if ( b.p == b.end )
+            break;
+        else if ( *(a.p) == *(b.p) ) {
+            *(a.tail++) = *(b.p++);
+            ++a.p;
+        }
+        else if ( *a.p < *b.p )
+            ++a.p;
+        else
+            ++b.p;
+    }
+
+    finalize_packed_array(asv, a);
+}
+
 int
 count_packed (char *packed, int len)
 {
@@ -98,5 +119,7 @@ void sort_packed(char *packed, int length(packed))
 void dedup_packed(SV *packed)
 
 void unique_packed(SV *a, SV *b)
+
+void intersect_packed(SV *a, SV *b)
 
 int count_packed(char *packed, int length(packed))
