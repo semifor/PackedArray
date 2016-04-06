@@ -29,3 +29,71 @@ use Sub::Exporter -setup => {
 };
 
 1;
+
+__END__
+
+=head1 NAME
+
+PackedArray - Set operations on packed, 64-bit integer arrays
+
+=head1 SYNOPSIS
+
+    use PackedArray qw/:all/;
+
+    my $left = array_to_packed(1..10);
+    my $right = array_to_packed(6..15);
+    unique_packed($left, $right);
+    say sprintf 'left: %s, right: %s',
+        join(' ', packed_to_array($left)),
+        join(' ', packed_to_array($right));
+
+    # left: 1 2 3 4 5, right: 11 12 13 14 15
+
+=head1 DESCRIPTION
+
+Set functions on packed, 64-bit integer arrays, implemented in XS for speed.
+
+=head1 FUNCTIONS
+
+=over 4
+
+=item array_to_packed(@integers)
+
+=item array_to_packed(\@integers)
+
+Returns a string of packed 64-bit integers.
+
+=item count_packed($packed)
+
+Returns the count of elements in a packed array of 64-bit integers.
+
+=item dedup_packed($packed)
+
+De-duplicate elements in a sorted, packed array of 64-bit integers, in place.
+The array will be shortened by the number of duplicates.
+
+=item intersect_packed($left, $right)
+
+Takes two, sorted, packed arrays of 64-bit integers. On return C<$left>
+contains the intersection of the two arrays.
+
+=item packed_to_array($packed)
+
+Returns a list of integers by unpacking C<$packed>.
+
+=item sort_packed($packed)
+
+Sorts a packed array of 64-bit integers, in-place.
+
+=item unique_packed($left, $right)
+
+Reduces C<$left> and C<$right> to their unique elements. Both arguments must be
+sorted and de-duplicated, first.
+
+=back
+
+=head1 AUTHOR
+
+Marc Mims <mmims@cpan.org>
+
+=cut
