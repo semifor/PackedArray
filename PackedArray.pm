@@ -4,7 +4,7 @@ use warnings;
 use Scalar::Util qw/blessed/;
 
 BEGIN {
-   our $VERSION = 0.02;
+   our $VERSION = 0.03;
 
    require XSLoader;
    XSLoader::load ("PackedArray", $VERSION);
@@ -14,11 +14,12 @@ sub array_to_packed {
     pack 'q*', ref $_[0] eq 'ARRAY' ? @{shift()} : @_;
 }
 
-sub packed_to_array { unpack 'q*', shift }
+sub packed_to_array { unpack 'q*', shift // '' }
 
 use Sub::Exporter -setup => {
     exports => [qw/
         array_to_packed
+        compare_packed
         count_packed
         dedup_packed
         intersect_packed
@@ -62,6 +63,13 @@ Set functions on packed, 64-bit integer arrays, implemented in XS for speed.
 =item array_to_packed(\@integers)
 
 Returns a string of packed 64-bit integers.
+
+=item compare_packed($left, $right)
+
+Takes two, sorted, packed arrays of 64-bit integers. Returns a packed, sorted,
+64-bit array of unique integers common to both C<$left> and C<$right>. Both
+C<$left> and C<$right> are modified to remove the common integers. I.e., on
+return they will contain only their unique elements.
 
 =item count_packed($packed)
 

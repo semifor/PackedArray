@@ -111,6 +111,7 @@ count_packed (char *packed, int len)
 }
 
 MODULE = PackedArray    PACKAGE = PackedArray
+PROTOTYPES: DISABLE
 
 void sort_packed(char *packed, int length(packed))
 
@@ -121,3 +122,33 @@ void unique_packed(SV *a, SV *b)
 void intersect_packed(SV *a, SV *b)
 
 int count_packed(char *packed, int length(packed))
+
+SV* compare_packed(SV *asv, SV *bsv)
+    PREINIT:
+        SV* c;
+	packed_array a, b;
+    CODE:
+        a = init_packed_array(asv);
+        b = init_packed_array(bsv);
+        c = newSVpv("", 0);
+
+        while ( a.p < a.end || b.p < b.end ) {
+            if ( a.p == a.end )
+                *(b.tail++) = *(b.p++);
+            else if ( b.p == b.end )
+                *(a.tail++) = *(a.p++);
+            else if ( *a.p < *b.p )
+                *(a.tail++) = *(a.p++);
+            else if ( *b.p < *a.p )
+                *(b.tail++) = *(b.p++);
+            else {
+                sv_catpvn(c, (const char*)a.p, sizeof(int64_t));
+                ++a.p, ++b.p;
+            }
+        }
+
+        finalize_packed_array(asv, a);
+        finalize_packed_array(bsv, b);
+        RETVAL = c;
+    OUTPUT:
+        RETVAL

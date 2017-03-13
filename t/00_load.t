@@ -1,8 +1,13 @@
+use warnings;
+use strict;
+my $loaded;
 BEGIN { $| = 1; print "1..24\n"; }
-END {print "not ok 1\n" unless $loaded;}
+END { print "not ok 1\n" unless $loaded }
 use PackedArray qw/:all/;
 $loaded = 1;
 print "ok 1\n";
+
+my ( $l, $r, $p, @l, @r, @p );
 
 # unique_packed
 $l = pack 'q*', 1..100; $r = pack 'q*', 11..105;
