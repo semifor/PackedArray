@@ -12,6 +12,8 @@ packed_array init_packed_array (SV *packed)
 {
     packed_array p;
     STRLEN len;
+
+    sv_force_normal(packed);
     p.start = (int64_t*)SvPV(packed, len);
     p.end   = p.start + len / sizeof(int64_t);
     p.tail = p.p = p.start;
@@ -33,20 +35,31 @@ int comp (const void * elem1, const void * elem2)
 }
 
 static void
-sort_packed (char *packed, int len)
+sort_packed (SV *packed)
 {
-    qsort(packed, len / sizeof(int64_t), sizeof(int64_t), comp);
+    STRLEN len;
+    char *buffer;
+
+    sv_force_normal(packed);
+    buffer = SvPV(packed, len);
+
+    qsort(buffer, len / sizeof(int64_t), sizeof(int64_t), comp);
 }
 
 static void
 dedup_packed (SV *packed)
 {
     STRLEN len;
-    int64_t *start = (int64_t*)SvPV(packed, len);
-    int n          = len / sizeof(int64_t);
-    int64_t *end   = start + n;
-    int64_t *tail  = start + 1;
-    int64_t *p     = tail;
+    int64_t *start;
+    int n;
+    int64_t *end, *tail, *p;
+
+    sv_force_normal(packed);
+    start = (int64_t*)SvPV(packed, len);
+    n          = len / sizeof(int64_t);
+    end   = start + n;
+    tail  = start + 1;
+    p     = tail;
 
     while ( p < end ) {
         if ( *p != *(p - 1) ) {
@@ -113,7 +126,7 @@ count_packed (char *packed, int len)
 MODULE = PackedArray    PACKAGE = PackedArray
 PROTOTYPES: DISABLE
 
-void sort_packed(char *packed, int length(packed))
+void sort_packed(SV *packed)
 
 void dedup_packed(SV *packed)
 

@@ -4,7 +4,7 @@ use warnings;
 use Scalar::Util qw/blessed/;
 
 BEGIN {
-   our $VERSION = 0.03;
+   our $VERSION = 0.04;
 
    require XSLoader;
    XSLoader::load ("PackedArray", $VERSION);
