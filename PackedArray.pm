@@ -4,7 +4,7 @@ use warnings;
 use Scalar::Util qw/blessed/;
 
 BEGIN {
-   our $VERSION = 0.04;
+   our $VERSION = 0.05;
 
    require XSLoader;
    XSLoader::load ("PackedArray", $VERSION);
@@ -16,6 +16,18 @@ sub array_to_packed {
 
 sub packed_to_array { unpack 'q*', shift // '' }
 
+sub venn_segment_packed {
+    my @venn;
+    while ( @_ ) {
+        my $top = @venn;
+        push @venn, shift;
+        for ( my $i = 0; $i < $top; ++$i ) {
+            push @venn, compare_packed($venn[$i], $venn[$top]);
+        }
+    }
+    return @venn;
+}
+
 use Sub::Exporter -setup => {
     exports => [qw/
         array_to_packed
@@ -26,6 +38,7 @@ use Sub::Exporter -setup => {
         packed_to_array
         sort_packed
         unique_packed
+        venn_segment_packed
     /],
 };
 
